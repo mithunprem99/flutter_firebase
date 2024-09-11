@@ -3,6 +3,7 @@ import 'package:flutter_firebase/screen/add_data.dart';
 import 'package:flutter_firebase/screen/mainscreen.dart';
 // import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_core/firebase_core.dart';
+import 'package:flutter_firebase/screen/update.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -22,6 +23,9 @@ class MyApp extends StatelessWidget {
       routes: {
         'add_data': (context) {
           return AddData();
+        },
+        'update_data': (context) {
+          return UpdateDonor();
         }
       },
     );

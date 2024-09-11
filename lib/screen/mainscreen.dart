@@ -50,7 +50,7 @@ class _MainscreenState extends State<Mainscreen> {
                               borderRadius: BorderRadius.circular(20),
                               color: Colors.white,
                               boxShadow: [
-                                BoxShadow(
+                               const BoxShadow(
                                     color: const Color.fromARGB(
                                         255, 182, 179, 179),
                                     blurRadius: 10,
@@ -67,7 +67,7 @@ class _MainscreenState extends State<Mainscreen> {
                                     radius: 30,
                                     child: Text(
                                       donorSnap['group'],
-                                      style: TextStyle(color: Colors.white),
+                                      style: const TextStyle(color: Colors.white),
                                     ),
                                   ),
                                 ),
@@ -77,26 +77,28 @@ class _MainscreenState extends State<Mainscreen> {
                                 children: [
                                   Text(
                                     donorSnap['name'],
-                                    style: TextStyle(
+                                    style: const TextStyle(
                                         fontSize: 18,
                                         fontWeight: FontWeight.bold),
                                   ),
                                   Text(
                                     donorSnap['phone'].toString(),
-                                    style: TextStyle(fontSize: 18),
+                                    style: const TextStyle(fontSize: 18),
                                   )
                                 ],
                               ),
                               Row(
                                 children: [
                                   IconButton(
-                                    onPressed: () {},
-                                    icon: Icon(Icons.edit),
+                                    onPressed: () {
+                                      navigateToUpdate(context,donorSnap);
+                                    },
+                                    icon: const Icon(Icons.edit),
                                     color: Colors.blue,
                                   ),
                                   IconButton(
                                     onPressed: () {},
-                                    icon: Icon(Icons.delete),
+                                    icon: const Icon(Icons.delete),
                                     color: Colors.red,
                                   ),
                                 ],
@@ -114,5 +116,15 @@ class _MainscreenState extends State<Mainscreen> {
 
   void navigateToAdd(BuildContext context) {
     Navigator.of(context).pushNamed('add_data');
+  }
+
+  void navigateToUpdate(BuildContext context, DocumentSnapshot donorSnap) {
+    Navigator.of(context).pushNamed('update_data', arguments: {
+      'name': donorSnap['name'],
+      'phone': donorSnap['phone'].toString(),
+      'group': donorSnap['group'],
+      'district': donorSnap['district'],
+      'id' : donorSnap.id
+    });
   }
 }
