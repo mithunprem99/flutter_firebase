@@ -33,7 +33,7 @@ class _MainscreenState extends State<Mainscreen> {
             child: const Icon(Icons.add)),
         floatingActionButtonLocation: FloatingActionButtonLocation.endTop,
         body: StreamBuilder(
-            stream: donor.snapshots(),
+            stream: donor.orderBy('name').snapshots(),
             builder: (context, AsyncSnapshot snapshot) {
               if (snapshot.hasData) {
                 return ListView.builder(
@@ -42,35 +42,67 @@ class _MainscreenState extends State<Mainscreen> {
                       final DocumentSnapshot donorSnap =
                           snapshot.data.docs[index];
                       // return Text(donorSnap['name']);
-                      return Container(
-                        height: 80,
-                        color: Colors.white,
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                              Container(
-                                child: CircleAvatar(
-                                  backgroundColor: Colors.red,
-                                  radius: 30,
-                                  child: Text(donorSnap['group'],style: TextStyle(color: Colors.white),),
+                      return Padding(
+                        padding: const EdgeInsets.all(10.0),
+                        child: Container(
+                          height: 80,
+                          decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(20),
+                              color: Colors.white,
+                              boxShadow: [
+                                BoxShadow(
+                                    color: const Color.fromARGB(
+                                        255, 182, 179, 179),
+                                    blurRadius: 10,
+                                    spreadRadius: 15)
+                              ]),
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              Padding(
+                                padding: const EdgeInsets.all(8.0),
+                                child: Container(
+                                  child: CircleAvatar(
+                                    backgroundColor: Colors.red,
+                                    radius: 30,
+                                    child: Text(
+                                      donorSnap['group'],
+                                      style: TextStyle(color: Colors.white),
+                                    ),
+                                  ),
                                 ),
                               ),
                               Column(
                                 mainAxisAlignment: MainAxisAlignment.center,
                                 children: [
-                                  Text(donorSnap['name'],style: TextStyle(fontSize: 18,fontWeight: FontWeight.bold),),
-                                  Text(donorSnap['phone'].toString(),style: TextStyle(fontSize: 18),)
-
+                                  Text(
+                                    donorSnap['name'],
+                                    style: TextStyle(
+                                        fontSize: 18,
+                                        fontWeight: FontWeight.bold),
+                                  ),
+                                  Text(
+                                    donorSnap['phone'].toString(),
+                                    style: TextStyle(fontSize: 18),
+                                  )
                                 ],
                               ),
                               Row(
                                 children: [
-                                  IconButton(onPressed: (){}, icon: Icon(Icons.edit)),
-                                  IconButton(onPressed: (){}, icon: Icon(Icons.delete)),
-
+                                  IconButton(
+                                    onPressed: () {},
+                                    icon: Icon(Icons.edit),
+                                    color: Colors.blue,
+                                  ),
+                                  IconButton(
+                                    onPressed: () {},
+                                    icon: Icon(Icons.delete),
+                                    color: Colors.red,
+                                  ),
                                 ],
                               )
-                          ],
+                            ],
+                          ),
                         ),
                       );
                     });
