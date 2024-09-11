@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 
 class AddData extends StatefulWidget {
   const AddData({super.key});
@@ -8,6 +9,8 @@ class AddData extends StatefulWidget {
 }
 
 class _AddDataState extends State<AddData> {
+  final CollectionReference donor =
+      FirebaseFirestore.instance.collection('donor');
   final blood_groups = [
     "A+ve",
     "B+ve",
@@ -35,7 +38,10 @@ class _AddDataState extends State<AddData> {
     "Kollam",
     "Trivandrum"
   ];
-
+  final _donorName = TextEditingController();
+  final _phone = TextEditingController();
+  // final _group = TextEditingController();
+  // final _district = TextEditingController();
   String? selectedGroup;
   String? selectedDistrict;
   @override
@@ -55,12 +61,14 @@ class _AddDataState extends State<AddData> {
         child: ListView(
           children: [
             TextFormField(
+                controller: _donorName,
                 decoration: const InputDecoration(
                     label: Text("Donor Name "),
                     border: OutlineInputBorder(
                         borderRadius: BorderRadius.all(Radius.circular(10))))),
             SizedBox(height: 15),
             TextFormField(
+                controller: _phone,
                 keyboardType: TextInputType.phone,
                 maxLength: 10,
                 decoration: const InputDecoration(
@@ -104,7 +112,10 @@ class _AddDataState extends State<AddData> {
               height: 15,
             ),
             ElevatedButton(
-                onPressed: () {},
+                onPressed: () {
+                  addDonor();
+                  Navigator.pop(context);
+                },
                 child: Text("Submit "),
                 style: ButtonStyle(
                     minimumSize:
@@ -115,5 +126,15 @@ class _AddDataState extends State<AddData> {
         ),
       ),
     );
+  }
+
+  void addDonor() {
+    final data = {
+      'name': _donorName.text,
+      'phone': _phone.text,
+      'group': selectedGroup,
+      'district': selectedDistrict,
+    };
+    donor.add(data);
   }
 }
