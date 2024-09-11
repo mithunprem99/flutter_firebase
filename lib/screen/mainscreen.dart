@@ -1,3 +1,5 @@
+import 'dart:ffi';
+
 import 'package:flutter/material.dart';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -50,7 +52,7 @@ class _MainscreenState extends State<Mainscreen> {
                               borderRadius: BorderRadius.circular(20),
                               color: Colors.white,
                               boxShadow: [
-                               const BoxShadow(
+                                const BoxShadow(
                                     color: const Color.fromARGB(
                                         255, 182, 179, 179),
                                     blurRadius: 10,
@@ -67,7 +69,8 @@ class _MainscreenState extends State<Mainscreen> {
                                     radius: 30,
                                     child: Text(
                                       donorSnap['group'],
-                                      style: const TextStyle(color: Colors.white),
+                                      style:
+                                          const TextStyle(color: Colors.white),
                                     ),
                                   ),
                                 ),
@@ -91,13 +94,15 @@ class _MainscreenState extends State<Mainscreen> {
                                 children: [
                                   IconButton(
                                     onPressed: () {
-                                      navigateToUpdate(context,donorSnap);
+                                      navigateToUpdate(context, donorSnap);
                                     },
                                     icon: const Icon(Icons.edit),
                                     color: Colors.blue,
                                   ),
                                   IconButton(
-                                    onPressed: () {},
+                                    onPressed: () {
+                                      deleteRecord(donorSnap.id); 
+                                    },
                                     icon: const Icon(Icons.delete),
                                     color: Colors.red,
                                   ),
@@ -124,7 +129,25 @@ class _MainscreenState extends State<Mainscreen> {
       'phone': donorSnap['phone'].toString(),
       'group': donorSnap['group'],
       'district': donorSnap['district'],
-      'id' : donorSnap.id
+      'id': donorSnap.id
     });
   }
+
+void deleteRecord(String donorId) async {
+  try {
+    // Delete the document from Firestore using its ID
+    await FirebaseFirestore.instance.collection('donor').doc(donorId).delete();
+
+    // Show a success message
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(content: Text('Donor record deleted successfully')),
+    );
+  } catch (e) {
+    // Show an error message if something goes wrong
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(content: Text('Failed to delete donor record: $e')),
+    );
+  }
+}
+
 }
